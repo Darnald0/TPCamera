@@ -7,18 +7,21 @@ abstract public class AView : MonoBehaviour
     public float weight;
     public bool isActiveOnStart;
 
-    private void Start() {
-        if (isActiveAndEnabled) {
+    private void Start() 
+    {
+        if (isActiveOnStart) 
+        {
             SetActive(true);
         }
     }
 
     public virtual CameraConfiguration GetConfiguration() {
-        CameraConfiguration config = new CameraConfiguration;
+        CameraConfiguration config = new CameraConfiguration();
         return config;
     }
 
-    public void SetActive(bool isActive) {
+    public void SetActive(bool isActive) 
+    {
 
     }
 }

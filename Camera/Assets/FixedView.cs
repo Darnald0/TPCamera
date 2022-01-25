@@ -10,8 +10,17 @@ public class FixedView : AView
     public float fov;
 
     public override CameraConfiguration GetConfiguration() {
-        // pivot  = transform.position;
-        // distance = 0;
-        return base.GetConfiguration();
+        CameraConfiguration config = new CameraConfiguration();
+        //CameraConfiguration config = base.GetConfiguration();
+
+        config.pivot  = transform.position;
+        config.distance = 0;
+
+        config.yaw = yaw;
+        config.pitch = pitch;
+        config.roll = roll;
+        config.fov = fov;
+
+        return config;
     }
 }
