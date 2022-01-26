@@ -21,7 +21,7 @@ public class CameraConfiguration : MonoBehaviour
 
     public Vector3 GetPosition()
     {
-        return GetRotation() * (Vector3.back * distance);
+        return pivot + GetRotation() * (Vector3.back * distance);
     }
 
     public void DrawGizmos(Color color)

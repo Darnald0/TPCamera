@@ -9,10 +9,7 @@ abstract public class AView : MonoBehaviour
 
     private void Start() 
     {
-        if (isActiveOnStart) 
-        {
-            SetActive(true);
-        }
+            SetActive(isActiveOnStart);
     }
 
     public virtual CameraConfiguration GetConfiguration() {
@@ -22,6 +19,9 @@ abstract public class AView : MonoBehaviour
 
     public void SetActive(bool isActive) 
     {
-        gameObject.SetActive(true);
+        if (isActive)
+            CameraController.instance.AddView(this);
+        else
+            CameraController.instance.RemoveView(this);
     }
 }

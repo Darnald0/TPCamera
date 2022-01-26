@@ -74,7 +74,8 @@ public class CameraController : MonoBehaviour
             else
             {
                 currentConfiguration = targetConfiguration;
-            }
+                ApplyConfiguration(camera, currentConfiguration);
+        }
     }
 
     CameraConfiguration PlusConfig(CameraConfiguration config1, CameraConfiguration config2)
@@ -123,6 +124,7 @@ public class CameraController : MonoBehaviour
         float totalRoll = 0;
         float totalDistance = 0;
         float totalFov = 0;
+        Vector3 totalPivot = Vector3.zero;
 
         float totalWeigh = 0;
 
@@ -135,6 +137,8 @@ public class CameraController : MonoBehaviour
 
             totalDistance += view.GetConfiguration().distance * view.weight;
             totalFov += view.GetConfiguration().fov * view.weight;
+
+            totalPivot += view.GetConfiguration().pivot * view.weight;
         }
 
         float blendedPitch = totalPitch / totalWeigh;
@@ -144,12 +148,16 @@ public class CameraController : MonoBehaviour
         float blendedDistance = totalDistance / totalWeigh;
         float blendedFov = totalFov / totalWeigh;
 
+        Vector3 blendedPivot = totalPivot / totalWeigh;
+
         blendViewConfig.pitch = blendedPitch;
         blendViewConfig.roll = blendedRoll;
         blendViewConfig.yaw = blendedYaw;
 
         blendViewConfig.distance = blendedDistance;
         blendViewConfig.fov = blendedFov;
+
+        blendViewConfig.pivot = blendedPivot;
 
         targetConfiguration = blendViewConfig;
 

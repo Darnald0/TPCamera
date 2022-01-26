@@ -9,7 +9,8 @@ public class FixedFollowView : AView
 
     public GameObject target;
 
-    Vector3 direction = Vector3.zero;
+    Vector3 dirToTarget = Vector3.zero;
+    Vector3 dirToCenter = Vector3.zero;
 
     public GameObject centralPoint;
     public float yawOffsetMax;
@@ -22,7 +23,8 @@ public class FixedFollowView : AView
 
     void LookTarget()
     {
-        direction = (target.transform.position - transform.position).normalized;
+        dirToTarget = (target.transform.position - transform.position).normalized;
+        dirToCenter = (centralPoint.transform.position - transform.position).normalized;
     }
 
     public override CameraConfiguration GetConfiguration()
@@ -33,32 +35,34 @@ public class FixedFollowView : AView
         config.pivot = transform.position;
         config.distance = 0;
         var radianMax = yawOffsetMax * Mathf.PI / 180;
-        var yaw = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-        if (yaw < yawOffsetMax && yaw > -yawOffsetMax) {
-            config.yaw = yaw;
-        } else {
-            if (yaw > 0) {
-                config.yaw = yawOffsetMax;
-            } else {
-                config.yaw = -yawOffsetMax;
-            }
+        var yawTarget = Mathf.Atan2(dirToTarget.x, dirToTarget.z) * Mathf.Rad2Deg;
+        var yawCenter = Mathf.Atan2(dirToCenter.x, dirToCenter.z) * Mathf.Rad2Deg;
+        var deltaYaw = yawTarget - yawCenter;
+
+        while(deltaYaw > 180)
+        {
+            deltaYaw -= 360;
         }
 
-        var pitch = -Mathf.Asin(direction.y) * Mathf.Rad2Deg;
-        if (pitch < pitchOffsetMax && pitch > -pitchOffsetMax) {
-            config.pitch = pitch;
-        } else {
-            if (pitch > 0) {
-                config.pitch = pitchOffsetMax;
-            } else {
-                config.pitch = -pitchOffsetMax;
-            }
+        while(deltaYaw < -180)
+        {
+            deltaYaw += 360;
         }
 
-        Debug.Log($"yaw: {yaw}");
+        deltaYaw = Mathf.Clamp(deltaYaw, -yawOffsetMax, yawOffsetMax);
+
+        var pitchToTarget = -Mathf.Asin(dirToTarget.y) * Mathf.Rad2Deg;
+        var pitchToCenter = -Mathf.Asin(dirToCenter.y) * Mathf.Rad2Deg;
+        var deltaPitch = pitchToTarget - pitchToCenter;
+        deltaPitch = Mathf.Clamp(deltaPitch, -pitchOffsetMax, pitchOffsetMax);
+
+
+        Debug.Log($"yaw: {yawTarget}");
         Debug.Log($"radianMax: {radianMax}");
-        Debug.Log($"pitch: {pitch}");
+        //Debug.Log($"pitch: {pitch}");
 
+        config.yaw = deltaYaw + yawCenter;
+        config.pitch = deltaPitch + pitchToCenter;
         config.roll = roll;
         config.fov = fov;
 
