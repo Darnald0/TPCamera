@@ -22,6 +22,6 @@ abstract public class AView : MonoBehaviour
 
     public void SetActive(bool isActive) 
     {
-
+        gameObject.SetActive(true);
     }
 }
