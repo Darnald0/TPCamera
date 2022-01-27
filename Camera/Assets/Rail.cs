@@ -50,27 +50,57 @@ public class Rail : MonoBehaviour
         {
             if(distance <= length)
             {
-                float totalLength = length;
-                float currentDistance = distance;
-                int travelIndex = 0;
-                float distanceBetweenPoint = 0;
-                while (totalLength > distance)
-                {
-                    var lengthToSubstract = (railCheckpoints[travelIndex].transform.position - railCheckpoints[travelIndex + 1].transform.position).magnitude;
-                    totalLength -= lengthToSubstract;
+                //float totalLength = length;
+                //float currentDistance = distance;
+                //int travelIndex = railCheckpoints.Count - 1;
+                //float distanceBetweenPoint = 0;
+                //while (totalLength > distance)
+                //{
+                //    var lengthToSubstract = (railCheckpoints[travelIndex].transform.position - railCheckpoints[travelIndex - 1].transform.position).magnitude;
+                //    totalLength -= lengthToSubstract;
 
-                    distanceBetweenPoint = currentDistance - lengthToSubstract;
-                    if (distanceBetweenPoint > 0)
-                        currentDistance -= distanceBetweenPoint;
+                //    distanceBetweenPoint = currentDistance - lengthToSubstract;
+                //    if (distanceBetweenPoint > 0)
+                //        currentDistance -= distanceBetweenPoint;
+
+                //    travelIndex--;
+
+                //}
+
+                //Debug.Log($"LENGTH LEFT: {totalLength} | PARCOURED DISTANCE: {distance} | CURRENTDISTANCE: {currentDistance} | DISTANCE BETWEEN POINT: {distanceBetweenPoint}");
+
+
+                //posToGo = railCheckpoints[travelIndex].transform.position +(railCheckpoints[travelIndex - 1].transform.position - railCheckpoints[travelIndex].transform.position).normalized * currentDistance;
+
+                float travelLength = 0;
+                float traveledDist = distance;
+                int travelIndex = 0;
+
+                while(traveledDist > 0)
+                {
+                    var distAtoB = (railCheckpoints[travelIndex].transform.position - railCheckpoints[travelIndex + 1].transform.position).magnitude;
+
+                    travelLength += distAtoB;
+                    traveledDist -= distAtoB;
 
                     travelIndex++;
-
                 }
 
-                Debug.Log($"LENGTH LEFT: {totalLength} | PARCOURED DISTANCE: {distance} | CURRENTDISTANCE: {currentDistance} | DISTANCE BETWEEN POINT: {distanceBetweenPoint}");
+                travelIndex--;
+
+                if(travelIndex > 0)
+                {
+                    posToGo = railCheckpoints[travelIndex].transform.position + (railCheckpoints[travelIndex + 1].transform.position - railCheckpoints[travelIndex].transform.position).normalized * (distance - travelLength);
+                }
+                else
+                {
+                    posToGo = railCheckpoints[0].transform.position + (railCheckpoints[1].transform.position - railCheckpoints[0].transform.position).normalized * (travelLength - distance);
+                }
+
+                Debug.Log($"Travel Length : {travelLength} & TraveledDist : {traveledDist} & pointOnDist : {travelLength - distance}");
 
 
-                posToGo = railCheckpoints[travelIndex].transform.position +(railCheckpoints[travelIndex + 1].transform.position - railCheckpoints[travelIndex].transform.position).normalized * currentDistance;
+
 
             } else
             {

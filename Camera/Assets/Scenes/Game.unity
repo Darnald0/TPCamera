@@ -718,7 +718,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c76e30c59eac834fb37cedb77b9bcd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 1
+  weight: 2
   isActiveOnStart: 0
   roll: 0
   fov: 50

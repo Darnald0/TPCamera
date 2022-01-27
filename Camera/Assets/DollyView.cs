@@ -55,7 +55,7 @@ public class DollyView : AView
             }
             else
             {
-                if (distanceOnRail < rail.GetLength())
+                if (distanceOnRail <= rail.GetLength())
                 {
                     distanceOnRail += speed * Time.deltaTime;
 
