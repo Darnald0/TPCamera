@@ -51,18 +51,28 @@ public class Rail : MonoBehaviour
             if(distance <= length)
             {
                 float totalLength = length;
+                float currentDistance = distance;
                 int travelIndex = 0;
-
-                while(totalLength > distance)
+                float distanceBetweenPoint = 0;
+                while (totalLength > distance)
                 {
-                    totalLength -= (railCheckpoints[travelIndex].transform.position - railCheckpoints[travelIndex + 1].transform.position).magnitude;
+                    var lengthToSubstract = (railCheckpoints[travelIndex].transform.position - railCheckpoints[travelIndex + 1].transform.position).magnitude;
+                    totalLength -= lengthToSubstract;
+
+                    distanceBetweenPoint = currentDistance - lengthToSubstract;
+                    if (distanceBetweenPoint > 0)
+                        currentDistance -= distanceBetweenPoint;
+
                     travelIndex++;
+
                 }
 
-                posToGo = (railCheckpoints[travelIndex + 1].transform.position - railCheckpoints[travelIndex].transform.position).normalized * distance;
-            }
+                Debug.Log($"LENGTH LEFT: {totalLength} | PARCOURED DISTANCE: {distance} | CURRENTDISTANCE: {currentDistance} | DISTANCE BETWEEN POINT: {distanceBetweenPoint}");
 
-            else
+
+                posToGo = railCheckpoints[travelIndex].transform.position +(railCheckpoints[travelIndex + 1].transform.position - railCheckpoints[travelIndex].transform.position).normalized * currentDistance;
+
+            } else
             {
                 posToGo = railCheckpoints[railCheckpoints.Count - 1].transform.position;
             }
