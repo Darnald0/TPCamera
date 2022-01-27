@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -74,7 +74,7 @@ public class Rail : MonoBehaviour
 
                 float travelLength = 0;
                 float traveledDist = distance;
-                int travelIndex = 0;
+                int travelIndex = 1;
 
                 while(traveledDist > 0)
                 {
@@ -84,20 +84,32 @@ public class Rail : MonoBehaviour
                     traveledDist -= distAtoB;
 
                     travelIndex++;
+
                 }
 
                 travelIndex--;
+                //Debug.Log($"TravelIndex : {travelIndex}");
 
-                if(travelIndex > 0)
+                if (travelIndex > 0)
                 {
-                    posToGo = railCheckpoints[travelIndex].transform.position + (railCheckpoints[travelIndex + 1].transform.position - railCheckpoints[travelIndex].transform.position).normalized * (distance - travelLength);
+                    Debug.Log($"TravelIndex : {travelIndex} | count : {railCheckpoints.Count - 1} ");
+
+                    if (travelIndex >= railCheckpoints.Count - 2) {
+                        posToGo = railCheckpoints[travelIndex].transform.position + (railCheckpoints[railCheckpoints.Count -1].transform.position - railCheckpoints[travelIndex].transform.position).normalized * (travelLength - distance);
+                        //Debug.Log("supérior");
+                    } else {
+                        posToGo = railCheckpoints[travelIndex].transform.position + (railCheckpoints[travelIndex - 1].transform.position - railCheckpoints[travelIndex].transform.position).normalized * (travelLength - distance);
+                        //Debug.Log("inférior");
+
+                    }
                 }
                 else
                 {
                     posToGo = railCheckpoints[0].transform.position + (railCheckpoints[1].transform.position - railCheckpoints[0].transform.position).normalized * (travelLength - distance);
                 }
 
-                Debug.Log($"Travel Length : {travelLength} & TraveledDist : {traveledDist} & pointOnDist : {travelLength - distance}");
+                //Debug.Log($"TRAVEL LENGTH : {travelLength} | DISTANCE : {distance} | DIFFERENCE : {travelLength - distance} | DIFFERENCE : {distance - travelLength} | DIR : {railCheckpoints[travelIndex].transform.position + (railCheckpoints[travelIndex + 1].transform.position - railCheckpoints[travelIndex].transform.position).normalized}");
+                //Debug.Log($"DIR AB : {railCheckpoints[travelIndex].transform.position - railCheckpoints[travelIndex + 1].transform.position} | DIR BA : {railCheckpoints[travelIndex +1].transform.position - railCheckpoints[travelIndex ].transform.position}");
 
 
 
@@ -111,7 +123,7 @@ public class Rail : MonoBehaviour
 
             //if (distance <= length)
             //{
-            //    // �a se dit pas mais c'est marrant
+            //    // 軋 se dit pas mais c'est marrant
             //    float totalLength = length;
             //    int travelIndex = 0;
 
