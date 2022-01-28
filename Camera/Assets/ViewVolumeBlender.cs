@@ -19,6 +19,42 @@ public class ViewVolumeBlender : MonoBehaviour
         instance = this;
     }
 
+    private void Update()
+    {
+        Blend();
+    }
+
+    public void OnUpdate()
+    {
+        Blend();
+    }
+
+    public void Blend()
+    {
+        float highestPriority = 0;
+
+        for (int i = 0; i < activeViewVolumes.Count; i++)
+        {
+            if (activeViewVolumes[i].priority > highestPriority)
+            {
+                highestPriority = activeViewVolumes[i].priority;
+            }
+        }
+           
+
+        foreach (AViewVolume v in activeViewVolumes)
+        {
+            if(v.priority < highestPriority)
+            {
+                v.view.weight = 0;
+            }
+            else
+            {
+                v.view.weight = Mathf.Max(v.view.weight, v.ComputeSelfWeight());
+            }
+        }
+    }
+
     public void AddVolume(AViewVolume volumeToAdd)
     {
         activeViewVolumes.Add(volumeToAdd);
@@ -42,6 +78,14 @@ public class ViewVolumeBlender : MonoBehaviour
             volumesPerViews.Remove(volumeToRemove.view);
 
             volumeToRemove.view.SetActive(false);
+        }
+    }
+
+    private void OnGUI()
+    {
+        foreach (AViewVolume volume in activeViewVolumes)
+        {
+            GUILayout.Label($"{volume.view.name} is active");
         }
     }
 }

@@ -29,6 +29,8 @@ public class CameraController : MonoBehaviour
     // Configuration lissée
     CameraConfiguration smoothedConfiguration = new CameraConfiguration();
 
+    private bool isCutRequested = false;
+
 
     private void Awake()
     {
@@ -54,7 +56,14 @@ public class CameraController : MonoBehaviour
         BlendCameraConfig();
         //ApplyConfiguration(camera, targetConfiguration);
 
-        SmoothBlendBetweenConfigs();
+        if (!isCutRequested)
+        {
+            SmoothBlendBetweenConfigs();
+        }
+        else
+        {
+            Cut();
+        }
     }
 
     void ApplyConfiguration(Camera camera, CameraConfiguration configuration)
@@ -160,11 +169,6 @@ public class CameraController : MonoBehaviour
         blendViewConfig.pivot = blendedPivot;
 
         targetConfiguration = blendViewConfig;
-
-
-        //currentConfiguration = newConfig;
-
-        //ApplyConfiguration(camera, currentConfiguration);
     }
 
     public float ComputeAverageYaw()
@@ -177,6 +181,12 @@ public class CameraController : MonoBehaviour
                 Mathf.Sin(config.yaw * Mathf.Deg2Rad)) * view.weight;
         }
         return Vector2.SignedAngle(Vector2.right, sum);
+    }
+
+    public void Cut()
+    {
+        ApplyConfiguration(camera, targetConfiguration);
+        currentConfiguration = targetConfiguration;
     }
 
 
