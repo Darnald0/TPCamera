@@ -100,14 +100,14 @@ public class Rail : MonoBehaviour
         for (int i = 0; i < railCheckpoints.Count - 1; i++) {
             Vector3 pointOnSegment = MathUtils.instance.GetNeareastPointOnSegment(railCheckpoints[i].transform.position, railCheckpoints[i + 1].transform.position, target);
             float distanceTargetSegment = (pointOnSegment - target).magnitude;
-            Debug.Log(distanceTargetSegment);
+            //Debug.Log(distanceTargetSegment);
             //Debug.Log($"VECTOR = {pointOnSegment} | MAGNITUDE = {pointOnSegment.magnitude}| SMALLEST = {smalestDistance}");
             if (distanceTargetSegment < smalestDistance) {
                 smalestDistance = distanceTargetSegment;
                 posOnSegment = pointOnSegment;
             }
         }
-        Debug.Log($"POS ON SEGMENT = {posOnSegment}");
+        //Debug.Log($"POS ON SEGMENT = {posOnSegment}");
 
         return posOnSegment;
     }
