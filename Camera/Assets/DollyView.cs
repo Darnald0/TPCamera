@@ -14,6 +14,8 @@ public class DollyView : AView
     public float distanceOnRail;
     public float speed;
 
+    public bool isAuto;
+
     private void Update()
     {
         CheckInput();
@@ -23,7 +25,12 @@ public class DollyView : AView
     {
         CameraConfiguration config = new CameraConfiguration();
 
-        config.pivot = rail.GetPosition(distanceOnRail);
+        if (!isAuto) {
+            config.pivot = rail.GetPosition(distanceOnRail);
+
+        } else {
+            config.pivot = rail.GetPositionOnSegment(target.transform.position);
+        }
         config.distance = 0;
 
         //config.yaw = yaw;
